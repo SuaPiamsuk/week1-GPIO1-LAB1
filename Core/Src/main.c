@@ -90,7 +90,7 @@ int main(void) {
 	/* USER CODE BEGIN 2 */
 
 	GPIO_PinState SWState[2]; // Now,Last
-	uint16_t LEB1_HalfPeriod = 500; //uint8_tมี255 ไม่พอ 1hz
+	uint16_t LEB1_HalfPeriod = 1000; //uint8_tมี255 ไม่พอ 1hz
 	uint32_t TimeStamp = 0;
 	uint32_t ButtonTimeStamp = 0;
 
@@ -113,6 +113,12 @@ int main(void) {
 			//เปลี่ยนความถี่
 			if (LEB1_HalfPeriod == 1000) {
 				LEB1_HalfPeriod = 500;
+			}
+			else if (LEB1_HalfPeriod == 500) {
+				LEB1_HalfPeriod = 250;
+			}
+			else if (LEB1_HalfPeriod == 250) {
+				LEB1_HalfPeriod = 1000/6;
 			}
 			else {
 				LEB1_HalfPeriod = 1000;
