@@ -177,32 +177,36 @@ int main(void)
 		SWState2[1] = SWState2[0];
 		SWState3[1] = SWState3[0];
 	}
-		//run led D1
-		//HAL_GetTick(); // ms
-		if (HAL_GetTick() - TimeStamp >= LEB1_HalfPeriod) {
-			TimeStamp = HAL_GetTick();
-			if (HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_9) == GPIO_PIN_SET) {
-				HAL_GPIO_WritePin(GPIOA, GPIO_PIN_9, GPIO_PIN_RESET);
-			} else {
-				HAL_GPIO_WritePin(GPIOA, GPIO_PIN_9, GPIO_PIN_SET);
-			}
-		} //end s1
+	// end about sw
 
-		//run LED D5
-		if (HAL_GetTick() - TimeStamp2 >= Time_D5) {
-			TimeStamp2 = HAL_GetTick();
+	///////////////////////////////////////////////////// LED Action /////////////////////////////////////////////////////////////
 
-			if (HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_6) == GPIO_PIN_SET) {
-				if(State_S3 == 0){ Time_D5=500; }
-				else if(State_S3 == 1){ Time_D5=1500; }
-				HAL_GPIO_WritePin(GPIOB, GPIO_PIN_6, GPIO_PIN_RESET);
-			} else {
-				if(State_S3 == 0){ Time_D5=1500; }
-				else if(State_S3 == 1){ Time_D5=500; }
-				HAL_GPIO_WritePin(GPIOB, GPIO_PIN_6, GPIO_PIN_SET);
-			}
+	//run led D1
+	//HAL_GetTick(); // ms
+	if (HAL_GetTick() - TimeStamp >= LEB1_HalfPeriod) {
+		TimeStamp = HAL_GetTick();
+		if (HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_9) == GPIO_PIN_SET) {
+			HAL_GPIO_WritePin(GPIOA, GPIO_PIN_9, GPIO_PIN_RESET);
+		} else {
+			HAL_GPIO_WritePin(GPIOA, GPIO_PIN_9, GPIO_PIN_SET);
 		}
-		///end run LED D5
+	} //end s1
+
+	//run LED D5
+	if (HAL_GetTick() - TimeStamp2 >= Time_D5) {
+		TimeStamp2 = HAL_GetTick();
+
+		if (HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_6) == GPIO_PIN_SET) {
+			if(State_S3 == 0){ Time_D5=500; }
+			else if(State_S3 == 1){ Time_D5=1500; }
+			HAL_GPIO_WritePin(GPIOB, GPIO_PIN_6, GPIO_PIN_RESET);
+		} else {
+			if(State_S3 == 0){ Time_D5=1500; }
+			else if(State_S3 == 1){ Time_D5=500; }
+			HAL_GPIO_WritePin(GPIOB, GPIO_PIN_6, GPIO_PIN_SET);
+		}
+	}
+	///end run LED D5
 
 	}
   /* USER CODE END 3 */
