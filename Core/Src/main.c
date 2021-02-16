@@ -111,11 +111,11 @@ int main(void) {
 		SWState[0] = HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_10);
 		if (SWState[1] == GPIO_PIN_SET && SWState[0] == GPIO_PIN_RESET) {
 			//เปลี่ยนความถี่
-			if (LEB1_HalfPeriod == 500) {
-				LEB1_HalfPeriod = 250;
+			if (LEB1_HalfPeriod == 1000) {
+				LEB1_HalfPeriod = 500;
 			}
 			else {
-				LEB1_HalfPeriod = 500;
+				LEB1_HalfPeriod = 1000;
 			}
 		}
 		SWState[1] = SWState[0];
