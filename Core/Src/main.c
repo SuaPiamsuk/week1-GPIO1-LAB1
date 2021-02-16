@@ -95,6 +95,8 @@ int main(void)
 	GPIO_PinState SWState3[2]; // Now,Last
 	uint16_t LEB1_HalfPeriod = 1000; //uint8_tมี255 ไม่พอ 1hz
 	uint32_t TimeStamp = 0;
+	uint32_t TimeStamp2 = 0;
+	uint16_t Time_D5 = 500; // start 0.5Hz
 	uint32_t ButtonTimeStamp = 0;
 	uint8_t State_S2 = 0;
 	uint8_t State_S3 = 0;
@@ -155,10 +157,14 @@ int main(void)
 		if (SWState3[1] == GPIO_PIN_SET && SWState3[0] == GPIO_PIN_RESET) {
 			//เปลี่ยนความถี่
 			if (State_S3 == 0) {
-				State_S3 = 1; HAL_GPIO_WritePin(GPIOB, GPIO_PIN_6, GPIO_PIN_SET);
+				State_S3 = 1;
+				Time_D5 == 1500;
+				//HAL_GPIO_WritePin(GPIOB, GPIO_PIN_6, GPIO_PIN_SET);
 			}
 			else if(State_S3 == 1){
-				State_S3 = 0; HAL_GPIO_WritePin(GPIOB, GPIO_PIN_6, GPIO_PIN_RESET);
+				State_S3 = 0;
+				Time_D5 == 500;
+				//HAL_GPIO_WritePin(GPIOB, GPIO_PIN_6, GPIO_PIN_RESET);
 			}
 
 			else {
@@ -181,6 +187,44 @@ int main(void)
 				HAL_GPIO_WritePin(GPIOA, GPIO_PIN_9, GPIO_PIN_SET);
 			}
 		} //end s1
+
+		//run LED D5
+
+//		if(State_S3 == 0){
+//			if(Time_D5 == 500){
+//				Time_D5 == 1500;
+//			}
+//			else if(Time_D5 == 1500){
+//				Time_D5 == 500;
+//				HAL_GPIO_WritePin(GPIOB, GPIO_PIN_6, GPIO_PIN_RESET);
+//			}
+//
+//		}
+//		if(State_S3 == 1){
+//			if(Time_D5 == 500){
+//				Time_D5 == 1500;
+//
+//			}
+//			else if(Time_D5 == 1500){
+//				Time_D5 == 500; HAL_GPIO_WritePin(GPIOB, GPIO_PIN_6, GPIO_PIN_RESET);
+//			}
+//
+//		}
+
+		if (HAL_GetTick() - TimeStamp2 >= Time_D5) {
+			TimeStamp2 = HAL_GetTick();
+
+			if (HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_6) == GPIO_PIN_SET) {
+				if(State_S3 == 0){ Time_D5=500; }
+				else if(State_S3 == 1){ Time_D5=1500; }
+				HAL_GPIO_WritePin(GPIOB, GPIO_PIN_6, GPIO_PIN_RESET);
+			} else {
+				if(State_S3 == 0){ Time_D5=1500; }
+				else if(State_S3 == 1){ Time_D5=500; }
+				HAL_GPIO_WritePin(GPIOB, GPIO_PIN_6, GPIO_PIN_SET);
+			}
+		}
+		///end run LED D5
 
 		//S2
 //		if(HAL_GetTick()- ButtonTimeStamp >= 100) //ms
