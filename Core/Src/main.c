@@ -92,10 +92,12 @@ int main(void)
 
 	GPIO_PinState SWState[2]; // Now,Last
 	GPIO_PinState SWState2[2]; // Now,Last
+	GPIO_PinState SWState3[2]; // Now,Last
 	uint16_t LEB1_HalfPeriod = 1000; //uint8_tมี255 ไม่พอ 1hz
 	uint32_t TimeStamp = 0;
 	uint32_t ButtonTimeStamp = 0;
 	uint8_t State_S2 = 0;
+	uint8_t State_S3 = 0;
 
   /* USER CODE END 2 */
 
@@ -113,6 +115,7 @@ int main(void)
 		//sw press=low
 		SWState[0] = HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_10);
 		SWState2[0] = HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_3);
+		SWState3[0] = HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_5);
 		if (SWState[1] == GPIO_PIN_SET && SWState[0] == GPIO_PIN_RESET) {
 			//เปลี่ยนความถี่
 			if (LEB1_HalfPeriod == 1000) {
@@ -148,9 +151,25 @@ int main(void)
 			}
 		}
 		///end s2
+		// S3
+		if (SWState3[1] == GPIO_PIN_SET && SWState3[0] == GPIO_PIN_RESET) {
+			//เปลี่ยนความถี่
+			if (State_S3 == 0) {
+				State_S3 = 1; HAL_GPIO_WritePin(GPIOB, GPIO_PIN_6, GPIO_PIN_SET);
+			}
+			else if(State_S3 == 1){
+				State_S3 = 0; HAL_GPIO_WritePin(GPIOB, GPIO_PIN_6, GPIO_PIN_RESET);
+			}
+
+			else {
+				State_S3 = 0;
+			}
+		}
+		//end S3
 
 		SWState[1] = SWState[0];
 		SWState2[1] = SWState2[0];
+		SWState3[1] = SWState3[0];
 	}
 		//run led1
 		//HAL_GetTick(); // ms
@@ -293,6 +312,9 @@ static void MX_GPIO_Init(void)
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOC, GPIO_PIN_7, GPIO_PIN_RESET);
 
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_6, GPIO_PIN_RESET);
+
   /*Configure GPIO pin : B1_Pin */
   GPIO_InitStruct.Pin = B1_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
@@ -319,10 +341,17 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : PB3 */
-  GPIO_InitStruct.Pin = GPIO_PIN_3;
+  /*Configure GPIO pins : PB3 PB5 */
+  GPIO_InitStruct.Pin = GPIO_PIN_3|GPIO_PIN_5;
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : PB6 */
+  GPIO_InitStruct.Pin = GPIO_PIN_6;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
 }
