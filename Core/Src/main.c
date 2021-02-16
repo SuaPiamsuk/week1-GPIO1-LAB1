@@ -177,7 +177,7 @@ int main(void)
 		SWState2[1] = SWState2[0];
 		SWState3[1] = SWState3[0];
 	}
-		//run led1
+		//run led D1
 		//HAL_GetTick(); // ms
 		if (HAL_GetTick() - TimeStamp >= LEB1_HalfPeriod) {
 			TimeStamp = HAL_GetTick();
@@ -189,28 +189,6 @@ int main(void)
 		} //end s1
 
 		//run LED D5
-
-//		if(State_S3 == 0){
-//			if(Time_D5 == 500){
-//				Time_D5 == 1500;
-//			}
-//			else if(Time_D5 == 1500){
-//				Time_D5 == 500;
-//				HAL_GPIO_WritePin(GPIOB, GPIO_PIN_6, GPIO_PIN_RESET);
-//			}
-//
-//		}
-//		if(State_S3 == 1){
-//			if(Time_D5 == 500){
-//				Time_D5 == 1500;
-//
-//			}
-//			else if(Time_D5 == 1500){
-//				Time_D5 == 500; HAL_GPIO_WritePin(GPIOB, GPIO_PIN_6, GPIO_PIN_RESET);
-//			}
-//
-//		}
-
 		if (HAL_GetTick() - TimeStamp2 >= Time_D5) {
 			TimeStamp2 = HAL_GetTick();
 
@@ -226,34 +204,6 @@ int main(void)
 		}
 		///end run LED D5
 
-		//S2
-//		if(HAL_GetTick()- ButtonTimeStamp >= 100) //ms
-//			{
-//				ButtonTimeStamp = HAL_GetTick();
-//
-//				//sw press=low
-//				SWState2[0] = HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_3);
-//				if (SWState2[1] == GPIO_PIN_SET && SWState2[0] == GPIO_PIN_RESET) {
-//					//เปลี่ยนความถี่
-//					if (State_S2 == 0) {
-//						State_S2 = 1;
-//						HAL_GPIO_WritePin(GPIOC, GPIO_PIN_7, GPIO_PIN_SET);
-//					}
-//					else if(State_S2 == 1){
-//						State_S2 = 0;
-//						HAL_GPIO_WritePin(GPIOC, GPIO_PIN_7, GPIO_PIN_RESET);
-//
-//					}
-//
-//					else {
-//						State_S2 = 0;
-//						HAL_GPIO_WritePin(GPIOC, GPIO_PIN_7, GPIO_PIN_RESET);
-//					}
-//				}
-//				SWState2[1] = SWState2[0];
-//			}
-
-		///end s3////
 	}
   /* USER CODE END 3 */
 }

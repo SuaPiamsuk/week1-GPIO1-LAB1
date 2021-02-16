@@ -27,23 +27,23 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   ALLOC
  11 .ARM.attributes 00000030  00000000  00000000  0002000c  2**0
                   CONTENTS, READONLY
- 12 .debug_info   000056e6  00000000  00000000  0002003c  2**0
+ 12 .debug_info   000056e1  00000000  00000000  0002003c  2**0
                   CONTENTS, READONLY, DEBUGGING
- 13 .debug_abbrev 000010e1  00000000  00000000  00025722  2**0
+ 13 .debug_abbrev 000010e1  00000000  00000000  0002571d  2**0
                   CONTENTS, READONLY, DEBUGGING
- 14 .debug_aranges 000005d8  00000000  00000000  00026808  2**3
+ 14 .debug_aranges 000005d8  00000000  00000000  00026800  2**3
                   CONTENTS, READONLY, DEBUGGING
- 15 .debug_ranges 00000540  00000000  00000000  00026de0  2**3
+ 15 .debug_ranges 00000540  00000000  00000000  00026dd8  2**3
                   CONTENTS, READONLY, DEBUGGING
- 16 .debug_macro  00014701  00000000  00000000  00027320  2**0
+ 16 .debug_macro  00014701  00000000  00000000  00027318  2**0
                   CONTENTS, READONLY, DEBUGGING
- 17 .debug_line   000053f6  00000000  00000000  0003ba21  2**0
+ 17 .debug_line   000053f4  00000000  00000000  0003ba19  2**0
                   CONTENTS, READONLY, DEBUGGING
- 18 .debug_str    00080e85  00000000  00000000  00040e17  2**0
+ 18 .debug_str    00080e85  00000000  00000000  00040e0d  2**0
                   CONTENTS, READONLY, DEBUGGING
- 19 .comment      0000007b  00000000  00000000  000c1c9c  2**0
+ 19 .comment      0000007b  00000000  00000000  000c1c92  2**0
                   CONTENTS, READONLY
- 20 .debug_frame  000016bc  00000000  00000000  000c1d18  2**2
+ 20 .debug_frame  000016bc  00000000  00000000  000c1d10  2**2
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -591,7 +591,7 @@ int main(void)
  80005fa:	783b      	ldrb	r3, [r7, #0]
  80005fc:	707b      	strb	r3, [r7, #1]
 	}
-		//run led1
+		//run led D1
 		//HAL_GetTick(); // ms
 		if (HAL_GetTick() - TimeStamp >= LEB1_HalfPeriod) {
  80005fe:	f000 fae7 	bl	8000bd0 <HAL_GetTick>
@@ -623,11 +623,10 @@ int main(void)
  8000634:	f44f 7100 	mov.w	r1, #512	; 0x200
  8000638:	481d      	ldr	r0, [pc, #116]	; (80006b0 <main+0x1d8>)
  800063a:	f000 fd55 	bl	80010e8 <HAL_GPIO_WritePin>
-//				Time_D5 == 500; HAL_GPIO_WritePin(GPIOB, GPIO_PIN_6, GPIO_PIN_RESET);
-//			}
-//
-//		}
+			}
+		} //end s1
 
+		//run LED D5
 		if (HAL_GetTick() - TimeStamp2 >= Time_D5) {
  800063e:	f000 fac7 	bl	8000bd0 <HAL_GetTick>
  8000642:	4602      	mov	r2, r0
