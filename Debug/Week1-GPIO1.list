@@ -27,23 +27,23 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   ALLOC
  11 .ARM.attributes 00000030  00000000  00000000  0002000c  2**0
                   CONTENTS, READONLY
- 12 .debug_info   0000568a  00000000  00000000  0002003c  2**0
+ 12 .debug_info   000056a8  00000000  00000000  0002003c  2**0
                   CONTENTS, READONLY, DEBUGGING
- 13 .debug_abbrev 000010e1  00000000  00000000  000256c6  2**0
+ 13 .debug_abbrev 000010e1  00000000  00000000  000256e4  2**0
                   CONTENTS, READONLY, DEBUGGING
- 14 .debug_aranges 000005d8  00000000  00000000  000267a8  2**3
+ 14 .debug_aranges 000005d8  00000000  00000000  000267c8  2**3
                   CONTENTS, READONLY, DEBUGGING
- 15 .debug_ranges 00000540  00000000  00000000  00026d80  2**3
+ 15 .debug_ranges 00000540  00000000  00000000  00026da0  2**3
                   CONTENTS, READONLY, DEBUGGING
- 16 .debug_macro  00014701  00000000  00000000  000272c0  2**0
+ 16 .debug_macro  00014701  00000000  00000000  000272e0  2**0
                   CONTENTS, READONLY, DEBUGGING
- 17 .debug_line   000053b6  00000000  00000000  0003b9c1  2**0
+ 17 .debug_line   000053b6  00000000  00000000  0003b9e1  2**0
                   CONTENTS, READONLY, DEBUGGING
- 18 .debug_str    00080e4e  00000000  00000000  00040d77  2**0
+ 18 .debug_str    00080e60  00000000  00000000  00040d97  2**0
                   CONTENTS, READONLY, DEBUGGING
- 19 .comment      0000007b  00000000  00000000  000c1bc5  2**0
+ 19 .comment      0000007b  00000000  00000000  000c1bf7  2**0
                   CONTENTS, READONLY
- 20 .debug_frame  000016bc  00000000  00000000  000c1c40  2**2
+ 20 .debug_frame  000016bc  00000000  00000000  000c1c74  2**2
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -361,7 +361,7 @@ Disassembly of section .text:
 int main(void)
 {
  80004d8:	b580      	push	{r7, lr}
- 80004da:	b084      	sub	sp, #16
+ 80004da:	b086      	sub	sp, #24
  80004dc:	af00      	add	r7, sp, #0
   /* USER CODE END 1 */
 
@@ -389,187 +389,188 @@ int main(void)
   /* USER CODE BEGIN 2 */
 
 	GPIO_PinState SWState[2]; // Now,Last
+	GPIO_PinState SWState2[2]; // Now,Last
 	uint16_t LEB1_HalfPeriod = 1000; //uint8_tมี255 ไม่พอ 1hz
  80004ee:	f44f 737a 	mov.w	r3, #1000	; 0x3e8
- 80004f2:	81fb      	strh	r3, [r7, #14]
+ 80004f2:	82fb      	strh	r3, [r7, #22]
 	uint32_t TimeStamp = 0;
  80004f4:	2300      	movs	r3, #0
- 80004f6:	60bb      	str	r3, [r7, #8]
+ 80004f6:	613b      	str	r3, [r7, #16]
 	uint32_t ButtonTimeStamp = 0;
  80004f8:	2300      	movs	r3, #0
- 80004fa:	607b      	str	r3, [r7, #4]
+ 80004fa:	60fb      	str	r3, [r7, #12]
+	uint8_t State_S2 = 0;
+ 80004fc:	2300      	movs	r3, #0
+ 80004fe:	72fb      	strb	r3, [r7, #11]
 	while (1) {
 
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
 	if(HAL_GetTick()- ButtonTimeStamp >= 100) //ms
- 80004fc:	f000 fafc 	bl	8000af8 <HAL_GetTick>
- 8000500:	4602      	mov	r2, r0
- 8000502:	687b      	ldr	r3, [r7, #4]
- 8000504:	1ad3      	subs	r3, r2, r3
- 8000506:	2b63      	cmp	r3, #99	; 0x63
- 8000508:	d929      	bls.n	800055e <main+0x86>
+ 8000500:	f000 fafa 	bl	8000af8 <HAL_GetTick>
+ 8000504:	4602      	mov	r2, r0
+ 8000506:	68fb      	ldr	r3, [r7, #12]
+ 8000508:	1ad3      	subs	r3, r2, r3
+ 800050a:	2b63      	cmp	r3, #99	; 0x63
+ 800050c:	d954      	bls.n	80005b8 <main+0xe0>
 	{
 		ButtonTimeStamp = HAL_GetTick();
- 800050a:	f000 faf5 	bl	8000af8 <HAL_GetTick>
- 800050e:	6078      	str	r0, [r7, #4]
+ 800050e:	f000 faf3 	bl	8000af8 <HAL_GetTick>
+ 8000512:	60f8      	str	r0, [r7, #12]
 		//HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_10);
 		//sw press=low
 		SWState[0] = HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_10);
- 8000510:	f44f 6180 	mov.w	r1, #1024	; 0x400
- 8000514:	483a      	ldr	r0, [pc, #232]	; (8000600 <main+0x128>)
- 8000516:	f000 fd63 	bl	8000fe0 <HAL_GPIO_ReadPin>
- 800051a:	4603      	mov	r3, r0
- 800051c:	703b      	strb	r3, [r7, #0]
+ 8000514:	f44f 6180 	mov.w	r1, #1024	; 0x400
+ 8000518:	4838      	ldr	r0, [pc, #224]	; (80005fc <main+0x124>)
+ 800051a:	f000 fd61 	bl	8000fe0 <HAL_GPIO_ReadPin>
+ 800051e:	4603      	mov	r3, r0
+ 8000520:	723b      	strb	r3, [r7, #8]
+		SWState2[0] = HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_3);
+ 8000522:	2108      	movs	r1, #8
+ 8000524:	4836      	ldr	r0, [pc, #216]	; (8000600 <main+0x128>)
+ 8000526:	f000 fd5b 	bl	8000fe0 <HAL_GPIO_ReadPin>
+ 800052a:	4603      	mov	r3, r0
+ 800052c:	713b      	strb	r3, [r7, #4]
 		if (SWState[1] == GPIO_PIN_SET && SWState[0] == GPIO_PIN_RESET) {
- 800051e:	787b      	ldrb	r3, [r7, #1]
- 8000520:	2b01      	cmp	r3, #1
- 8000522:	d11a      	bne.n	800055a <main+0x82>
- 8000524:	783b      	ldrb	r3, [r7, #0]
- 8000526:	2b00      	cmp	r3, #0
- 8000528:	d117      	bne.n	800055a <main+0x82>
+ 800052e:	7a7b      	ldrb	r3, [r7, #9]
+ 8000530:	2b01      	cmp	r3, #1
+ 8000532:	d11a      	bne.n	800056a <main+0x92>
+ 8000534:	7a3b      	ldrb	r3, [r7, #8]
+ 8000536:	2b00      	cmp	r3, #0
+ 8000538:	d117      	bne.n	800056a <main+0x92>
 			//เปลี่ยนความถี่
 			if (LEB1_HalfPeriod == 1000) {
- 800052a:	89fb      	ldrh	r3, [r7, #14]
- 800052c:	f5b3 7f7a 	cmp.w	r3, #1000	; 0x3e8
- 8000530:	d103      	bne.n	800053a <main+0x62>
+ 800053a:	8afb      	ldrh	r3, [r7, #22]
+ 800053c:	f5b3 7f7a 	cmp.w	r3, #1000	; 0x3e8
+ 8000540:	d103      	bne.n	800054a <main+0x72>
 				LEB1_HalfPeriod = 500;
- 8000532:	f44f 73fa 	mov.w	r3, #500	; 0x1f4
- 8000536:	81fb      	strh	r3, [r7, #14]
- 8000538:	e00f      	b.n	800055a <main+0x82>
+ 8000542:	f44f 73fa 	mov.w	r3, #500	; 0x1f4
+ 8000546:	82fb      	strh	r3, [r7, #22]
+ 8000548:	e00f      	b.n	800056a <main+0x92>
 			}
 			else if (LEB1_HalfPeriod == 500) {
- 800053a:	89fb      	ldrh	r3, [r7, #14]
- 800053c:	f5b3 7ffa 	cmp.w	r3, #500	; 0x1f4
- 8000540:	d102      	bne.n	8000548 <main+0x70>
+ 800054a:	8afb      	ldrh	r3, [r7, #22]
+ 800054c:	f5b3 7ffa 	cmp.w	r3, #500	; 0x1f4
+ 8000550:	d102      	bne.n	8000558 <main+0x80>
 				LEB1_HalfPeriod = 250;
- 8000542:	23fa      	movs	r3, #250	; 0xfa
- 8000544:	81fb      	strh	r3, [r7, #14]
- 8000546:	e008      	b.n	800055a <main+0x82>
+ 8000552:	23fa      	movs	r3, #250	; 0xfa
+ 8000554:	82fb      	strh	r3, [r7, #22]
+ 8000556:	e008      	b.n	800056a <main+0x92>
 			}
 			else if (LEB1_HalfPeriod == 250) {
- 8000548:	89fb      	ldrh	r3, [r7, #14]
- 800054a:	2bfa      	cmp	r3, #250	; 0xfa
- 800054c:	d102      	bne.n	8000554 <main+0x7c>
+ 8000558:	8afb      	ldrh	r3, [r7, #22]
+ 800055a:	2bfa      	cmp	r3, #250	; 0xfa
+ 800055c:	d102      	bne.n	8000564 <main+0x8c>
 				LEB1_HalfPeriod = 1000/6;
- 800054e:	23a6      	movs	r3, #166	; 0xa6
- 8000550:	81fb      	strh	r3, [r7, #14]
- 8000552:	e002      	b.n	800055a <main+0x82>
+ 800055e:	23a6      	movs	r3, #166	; 0xa6
+ 8000560:	82fb      	strh	r3, [r7, #22]
+ 8000562:	e002      	b.n	800056a <main+0x92>
 			}
 			else {
 				LEB1_HalfPeriod = 1000;
- 8000554:	f44f 737a 	mov.w	r3, #1000	; 0x3e8
- 8000558:	81fb      	strh	r3, [r7, #14]
+ 8000564:	f44f 737a 	mov.w	r3, #1000	; 0x3e8
+ 8000568:	82fb      	strh	r3, [r7, #22]
 			}
 		}
+
+		//S2
+		if (SWState2[1] == GPIO_PIN_SET && SWState2[0] == GPIO_PIN_RESET) {
+ 800056a:	797b      	ldrb	r3, [r7, #5]
+ 800056c:	2b01      	cmp	r3, #1
+ 800056e:	d11f      	bne.n	80005b0 <main+0xd8>
+ 8000570:	793b      	ldrb	r3, [r7, #4]
+ 8000572:	2b00      	cmp	r3, #0
+ 8000574:	d11c      	bne.n	80005b0 <main+0xd8>
+			//เปลี่ยนความถี่
+			if (State_S2 == 0) {
+ 8000576:	7afb      	ldrb	r3, [r7, #11]
+ 8000578:	2b00      	cmp	r3, #0
+ 800057a:	d107      	bne.n	800058c <main+0xb4>
+				State_S2 = 1;
+ 800057c:	2301      	movs	r3, #1
+ 800057e:	72fb      	strb	r3, [r7, #11]
+				HAL_GPIO_WritePin(GPIOC, GPIO_PIN_7, GPIO_PIN_SET);
+ 8000580:	2201      	movs	r2, #1
+ 8000582:	2180      	movs	r1, #128	; 0x80
+ 8000584:	481f      	ldr	r0, [pc, #124]	; (8000604 <main+0x12c>)
+ 8000586:	f000 fd43 	bl	8001010 <HAL_GPIO_WritePin>
+ 800058a:	e011      	b.n	80005b0 <main+0xd8>
+			}
+			else if(State_S2 == 1){
+ 800058c:	7afb      	ldrb	r3, [r7, #11]
+ 800058e:	2b01      	cmp	r3, #1
+ 8000590:	d107      	bne.n	80005a2 <main+0xca>
+				State_S2 = 0;
+ 8000592:	2300      	movs	r3, #0
+ 8000594:	72fb      	strb	r3, [r7, #11]
+				HAL_GPIO_WritePin(GPIOC, GPIO_PIN_7, GPIO_PIN_RESET);
+ 8000596:	2200      	movs	r2, #0
+ 8000598:	2180      	movs	r1, #128	; 0x80
+ 800059a:	481a      	ldr	r0, [pc, #104]	; (8000604 <main+0x12c>)
+ 800059c:	f000 fd38 	bl	8001010 <HAL_GPIO_WritePin>
+ 80005a0:	e006      	b.n	80005b0 <main+0xd8>
+
+			}
+
+			else {
+				State_S2 = 0;
+ 80005a2:	2300      	movs	r3, #0
+ 80005a4:	72fb      	strb	r3, [r7, #11]
+				HAL_GPIO_WritePin(GPIOC, GPIO_PIN_7, GPIO_PIN_RESET);
+ 80005a6:	2200      	movs	r2, #0
+ 80005a8:	2180      	movs	r1, #128	; 0x80
+ 80005aa:	4816      	ldr	r0, [pc, #88]	; (8000604 <main+0x12c>)
+ 80005ac:	f000 fd30 	bl	8001010 <HAL_GPIO_WritePin>
+			}
+		}
+		///end s2
+
 		SWState[1] = SWState[0];
- 800055a:	783b      	ldrb	r3, [r7, #0]
- 800055c:	707b      	strb	r3, [r7, #1]
+ 80005b0:	7a3b      	ldrb	r3, [r7, #8]
+ 80005b2:	727b      	strb	r3, [r7, #9]
+		SWState2[1] = SWState2[0];
+ 80005b4:	793b      	ldrb	r3, [r7, #4]
+ 80005b6:	717b      	strb	r3, [r7, #5]
 	}
 		//run led1
 		//HAL_GetTick(); // ms
 		if (HAL_GetTick() - TimeStamp >= LEB1_HalfPeriod) {
- 800055e:	f000 facb 	bl	8000af8 <HAL_GetTick>
- 8000562:	4602      	mov	r2, r0
- 8000564:	68bb      	ldr	r3, [r7, #8]
- 8000566:	1ad2      	subs	r2, r2, r3
- 8000568:	89fb      	ldrh	r3, [r7, #14]
- 800056a:	429a      	cmp	r2, r3
- 800056c:	d317      	bcc.n	800059e <main+0xc6>
+ 80005b8:	f000 fa9e 	bl	8000af8 <HAL_GetTick>
+ 80005bc:	4602      	mov	r2, r0
+ 80005be:	693b      	ldr	r3, [r7, #16]
+ 80005c0:	1ad2      	subs	r2, r2, r3
+ 80005c2:	8afb      	ldrh	r3, [r7, #22]
+ 80005c4:	429a      	cmp	r2, r3
+ 80005c6:	d39b      	bcc.n	8000500 <main+0x28>
 			TimeStamp = HAL_GetTick();
- 800056e:	f000 fac3 	bl	8000af8 <HAL_GetTick>
- 8000572:	60b8      	str	r0, [r7, #8]
+ 80005c8:	f000 fa96 	bl	8000af8 <HAL_GetTick>
+ 80005cc:	6138      	str	r0, [r7, #16]
 			if (HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_9) == GPIO_PIN_SET) {
- 8000574:	f44f 7100 	mov.w	r1, #512	; 0x200
- 8000578:	4821      	ldr	r0, [pc, #132]	; (8000600 <main+0x128>)
- 800057a:	f000 fd31 	bl	8000fe0 <HAL_GPIO_ReadPin>
- 800057e:	4603      	mov	r3, r0
- 8000580:	2b01      	cmp	r3, #1
- 8000582:	d106      	bne.n	8000592 <main+0xba>
+ 80005ce:	f44f 7100 	mov.w	r1, #512	; 0x200
+ 80005d2:	480a      	ldr	r0, [pc, #40]	; (80005fc <main+0x124>)
+ 80005d4:	f000 fd04 	bl	8000fe0 <HAL_GPIO_ReadPin>
+ 80005d8:	4603      	mov	r3, r0
+ 80005da:	2b01      	cmp	r3, #1
+ 80005dc:	d106      	bne.n	80005ec <main+0x114>
 				HAL_GPIO_WritePin(GPIOA, GPIO_PIN_9, GPIO_PIN_RESET);
- 8000584:	2200      	movs	r2, #0
- 8000586:	f44f 7100 	mov.w	r1, #512	; 0x200
- 800058a:	481d      	ldr	r0, [pc, #116]	; (8000600 <main+0x128>)
- 800058c:	f000 fd40 	bl	8001010 <HAL_GPIO_WritePin>
- 8000590:	e005      	b.n	800059e <main+0xc6>
+ 80005de:	2200      	movs	r2, #0
+ 80005e0:	f44f 7100 	mov.w	r1, #512	; 0x200
+ 80005e4:	4805      	ldr	r0, [pc, #20]	; (80005fc <main+0x124>)
+ 80005e6:	f000 fd13 	bl	8001010 <HAL_GPIO_WritePin>
+ 80005ea:	e789      	b.n	8000500 <main+0x28>
 			} else {
 				HAL_GPIO_WritePin(GPIOA, GPIO_PIN_9, GPIO_PIN_SET);
- 8000592:	2201      	movs	r2, #1
- 8000594:	f44f 7100 	mov.w	r1, #512	; 0x200
- 8000598:	4819      	ldr	r0, [pc, #100]	; (8000600 <main+0x128>)
- 800059a:	f000 fd39 	bl	8001010 <HAL_GPIO_WritePin>
-			}
-		} //end s1
-
-		//S2
-		if(HAL_GetTick()- ButtonTimeStamp >= 100) //ms
- 800059e:	f000 faab 	bl	8000af8 <HAL_GetTick>
- 80005a2:	4602      	mov	r2, r0
- 80005a4:	687b      	ldr	r3, [r7, #4]
- 80005a6:	1ad3      	subs	r3, r2, r3
- 80005a8:	2b63      	cmp	r3, #99	; 0x63
- 80005aa:	d9a7      	bls.n	80004fc <main+0x24>
-			{
-				ButtonTimeStamp = HAL_GetTick();
- 80005ac:	f000 faa4 	bl	8000af8 <HAL_GetTick>
- 80005b0:	6078      	str	r0, [r7, #4]
-				//HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_10);
-				//sw press=low
-				SWState[0] = HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_3);
- 80005b2:	2108      	movs	r1, #8
- 80005b4:	4813      	ldr	r0, [pc, #76]	; (8000604 <main+0x12c>)
- 80005b6:	f000 fd13 	bl	8000fe0 <HAL_GPIO_ReadPin>
- 80005ba:	4603      	mov	r3, r0
- 80005bc:	703b      	strb	r3, [r7, #0]
-				if (SWState[1] == GPIO_PIN_SET && SWState[0] == GPIO_PIN_RESET) {
- 80005be:	787b      	ldrb	r3, [r7, #1]
- 80005c0:	2b01      	cmp	r3, #1
- 80005c2:	d11a      	bne.n	80005fa <main+0x122>
- 80005c4:	783b      	ldrb	r3, [r7, #0]
- 80005c6:	2b00      	cmp	r3, #0
- 80005c8:	d117      	bne.n	80005fa <main+0x122>
-					//เปลี่ยนความถี่
-					if (LEB1_HalfPeriod == 1000) {
- 80005ca:	89fb      	ldrh	r3, [r7, #14]
- 80005cc:	f5b3 7f7a 	cmp.w	r3, #1000	; 0x3e8
- 80005d0:	d103      	bne.n	80005da <main+0x102>
-						LEB1_HalfPeriod = 500;
- 80005d2:	f44f 73fa 	mov.w	r3, #500	; 0x1f4
- 80005d6:	81fb      	strh	r3, [r7, #14]
- 80005d8:	e00f      	b.n	80005fa <main+0x122>
-					}
-					else if (LEB1_HalfPeriod == 500) {
- 80005da:	89fb      	ldrh	r3, [r7, #14]
- 80005dc:	f5b3 7ffa 	cmp.w	r3, #500	; 0x1f4
- 80005e0:	d102      	bne.n	80005e8 <main+0x110>
-						LEB1_HalfPeriod = 250;
- 80005e2:	23fa      	movs	r3, #250	; 0xfa
- 80005e4:	81fb      	strh	r3, [r7, #14]
- 80005e6:	e008      	b.n	80005fa <main+0x122>
-					}
-					else if (LEB1_HalfPeriod == 250) {
- 80005e8:	89fb      	ldrh	r3, [r7, #14]
- 80005ea:	2bfa      	cmp	r3, #250	; 0xfa
- 80005ec:	d102      	bne.n	80005f4 <main+0x11c>
-						LEB1_HalfPeriod = 1000/6;
- 80005ee:	23a6      	movs	r3, #166	; 0xa6
- 80005f0:	81fb      	strh	r3, [r7, #14]
- 80005f2:	e002      	b.n	80005fa <main+0x122>
-					}
-					else {
-						LEB1_HalfPeriod = 1000;
- 80005f4:	f44f 737a 	mov.w	r3, #1000	; 0x3e8
- 80005f8:	81fb      	strh	r3, [r7, #14]
-					}
-				}
-				SWState[1] = SWState[0];
- 80005fa:	783b      	ldrb	r3, [r7, #0]
- 80005fc:	707b      	strb	r3, [r7, #1]
+ 80005ec:	2201      	movs	r2, #1
+ 80005ee:	f44f 7100 	mov.w	r1, #512	; 0x200
+ 80005f2:	4802      	ldr	r0, [pc, #8]	; (80005fc <main+0x124>)
+ 80005f4:	f000 fd0c 	bl	8001010 <HAL_GPIO_WritePin>
 	if(HAL_GetTick()- ButtonTimeStamp >= 100) //ms
- 80005fe:	e77d      	b.n	80004fc <main+0x24>
- 8000600:	40020000 	.word	0x40020000
- 8000604:	40020400 	.word	0x40020400
+ 80005f8:	e782      	b.n	8000500 <main+0x28>
+ 80005fa:	bf00      	nop
+ 80005fc:	40020000 	.word	0x40020000
+ 8000600:	40020400 	.word	0x40020400
+ 8000604:	40020800 	.word	0x40020800
 
 08000608 <SystemClock_Config>:
 /**
