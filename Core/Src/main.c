@@ -175,7 +175,7 @@ int main(void)
 
 		SWState[1] = SWState[0];
 		SWState2[1] = SWState2[0];
-		SWState3[1] = SWState3[0];
+		SWState3[1] = SWState3[0]; //add test comment
 	}
 	// end about sw
 
